@@ -3,27 +3,12 @@ from django.http import Http404
 from .serializers import RegistrationSerializer, HODSerializer, WorkerSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import BasePermission,  SAFE_METHODS, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 from .models import HODProfile, WorkersProfile
+from task.permissions import HODsPermission, WorkersPermission, UserEditDeletePermission
 
 # Create your views here.
-class WorkersPermission(BasePermission):
-    def has_permission(self, request, view):
-        return request.user.role == 'Worker'
-
-class HODsPermission(BasePermission):
-    def has_permission(self, request, view):
-        return request.user.role == 'HOD'
-
-
-class UserEditDeletePermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
-        return obj.user == request.user
-
-
 class RegistrationView(APIView):
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
