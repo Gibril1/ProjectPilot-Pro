@@ -3,10 +3,18 @@ from django.http import Http404
 from .serializers import RegistrationSerializer, HODSerializer, WorkerSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS
+from rest_framework.generics import RetrieveUpdateAPIView, CreateAPIView
 from rest_framework import status
 from .models import HODProfile, WorkersProfile
-from task.permissions import HODsPermission, WorkersPermission, UserEditDeletePermission
+from task.permissions import HODsPermission, WorkersPermission
+
+
+class UserEditDeletePermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return obj.user == request.user
 
 # Create your views here.
 class RegistrationView(APIView):
@@ -18,60 +26,27 @@ class RegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class HODView(APIView):
-    permission_classes = [HODsPermission]
-    def post(self, request):
-        serializer = HODSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class HODDetailsView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly,UserEditDeletePermission]
-
-    def get_hod(self, id):
-        try:
-            return HODProfile.objects.filter(user=id).first()
-        except HODProfile.DoesNotExist:
-            raise Http404
-
-    def put(self, request, id):
-        hod = self.get_hod(id)
-        serializer = HODSerializer(hod, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+class HODView(CreateAPIView):
+    permission_classes = [IsAuthenticated, HODsPermission]
+    queryset = HODProfile.objects.all()
+    serializer_class = HODSerializer
     
 
-class WorkerView(APIView):
+
+class HODDetailsView(RetrieveUpdateAPIView, UserEditDeletePermission):
+    permission_classes = [IsAuthenticated, UserEditDeletePermission]
+    queryset = HODProfile.objects.all()
+    serializer_class = HODSerializer
+    
+
+class WorkerView(CreateAPIView):
     permission_classes = [WorkersPermission]
-    def post(self, request):
-        serializer = WorkerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = WorkersProfile.objects.all()
+    serializer_class = WorkerSerializer
 
-class WorkerDetailsView(APIView):
-    permission_classes = [UserEditDeletePermission]
-
-    def get_worker(self, id):
-        try:
-            return WorkersProfile.objects.filter(user=id).first()
-        except WorkersProfile.DoesNotExist:
-            raise Http404
-
-    def put(self, request, id):
-        worker = self.get_worker(id)
-        serializer = WorkerSerializer(worker, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
+class WorkerDetailsView(RetrieveUpdateAPIView, UserEditDeletePermission):
+    permission_classes = [UserEditDeletePermission, IsAuthenticated]
+    queryset = WorkersProfile.objects.all()
+    serializer_class = WorkerSerializer
 

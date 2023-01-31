@@ -11,14 +11,14 @@ from ..serializers import WorkersDepartmentSerializers
 class JoinDepartmentView(APIView):
     permission_classes = [WorkersPermission]
 
-    def get_department(self, id):
+    def get_department(self, pk):
         try:
-            return Department.objects.get(id=id)
+            return Department.objects.get(id=pk)
         except Department.DoesNotExist:
             raise Http404
 
-    def get(self, request, id):
-        department = self.get_department(id)
+    def get(self, request, pk):
+        department = self.get_department(pk)
         worker = WorkersProfile.objects.filter(user=request.user).first()
         if not worker:
             message = f'Worker with id of { request.user } does not exist'

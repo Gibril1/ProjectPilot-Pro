@@ -2,14 +2,20 @@ from django.shortcuts import render
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework import status
 from users.models import HODProfile
 from ..serializers import DepartmentSerializers
-from ..permissions import HODsPermission, UserEditDeletePermission
+from ..permissions import HODsPermission
 from ..models import Department
 
-# Create your views here.
+class UserEditDeletePermission(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return obj.hod.user == request.user
+
 class DepartmentView(APIView):
     permission_classes = [IsAuthenticated, HODsPermission]
     def post(self, request):
@@ -23,39 +29,14 @@ class DepartmentView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DepartmentsView(APIView):
+class DepartmentsView(ListAPIView):
     permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        departments = Department.objects.all()
-        serializer = DepartmentSerializers(departments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class DepartmentDetailsView(APIView):
-    permission_classes = [UserEditDeletePermission]
-    def get_department(self,id):
-        try:
-            return Department.objects.get(id=id)
-        except Department.DoesNotExist:
-            raise Http404
-
-    def get(self, request, id):
-        department = self.get_department(id)
-        serializer = DepartmentSerializers(department)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, id):
-        department = self.get_department(id)
-        serializer = DepartmentSerializers(department,  data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializers
 
     
-    def delete(self, request, id):
-        department = self.get_department(id)
-        department.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class DepartmentDetailsView(RetrieveUpdateDestroyAPIView, UserEditDeletePermission):
+    permission_classes = [IsAuthenticated, UserEditDeletePermission]
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializers
 
