@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'task',
+    'users'
 
 ]
 
@@ -136,3 +137,5 @@ REST_FRAMEWORK = {
     ]
     
 }
+
+AUTH_USER_MODEL = 'users.User'
