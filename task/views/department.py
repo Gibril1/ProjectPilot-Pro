@@ -18,11 +18,14 @@ class UserEditDeletePermission(BasePermission):
 
 class DepartmentView(APIView):
     permission_classes = [IsAuthenticated, HODsPermission]
+    def get_hod(self, id):
+        try:
+            return HODProfile.objects.filter(user=id).first()
+        except:
+            raise Http404
+
     def post(self, request):
-        hod = HODProfile.objects.filter(user=request.user).first()
-        if not hod:
-            message = f'HOD with id of {request.user} does not exist'
-            return Response(message, status=status.HTTP_404_NOT_FOUND)
+        hod = self.get_hod(request.user)
         serializer = DepartmentSerializers(data=request.data)
         if serializer.is_valid():
             serializer.save(hod=hod)
@@ -30,7 +33,7 @@ class DepartmentView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DepartmentsView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HODsPermission]
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializers
 
