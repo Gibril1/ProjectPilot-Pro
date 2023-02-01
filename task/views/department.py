@@ -2,19 +2,15 @@ from django.shortcuts import render
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework import status
 from users.models import HODProfile
 from ..serializers import DepartmentSerializers
-from ..permissions import HODsPermission
+from ..permissions import HODsPermission, UserEditDeletePermission
 from ..models import Department
 
-class UserEditDeletePermission(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
-        return obj.hod.user == request.user
+
 
 class DepartmentView(APIView):
     permission_classes = [IsAuthenticated, HODsPermission]
