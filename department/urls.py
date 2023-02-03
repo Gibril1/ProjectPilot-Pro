@@ -5,7 +5,8 @@ from .views import (
     DepartmentDetailsView, 
     ListDepartmentsView, 
     JoinDepartmentView,
-    GetMembersOfDepartment
+    GetMembersOfDepartment,
+    GetUserDepartmentView
     )
 
 urlpatterns = [
@@ -13,5 +14,6 @@ urlpatterns = [
     path('', ListDepartmentsView.as_view(), name='view_departments'),
     path('<int:pk>/', DepartmentDetailsView.as_view(), name='department_details'),
     path('join/<int:id>', JoinDepartmentView.as_view(), name='join_department'),
-    path('members/<int:id>',GetMembersOfDepartment.as_view(), name='get_members_of_department' )
+    path('members/<int:id>',GetMembersOfDepartment.as_view(), name='get_members_of_department' ),
+    path('user/<int:id>', GetUserDepartmentView.as_view(), name='get_users_departments')
 ]

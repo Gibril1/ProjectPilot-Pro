@@ -80,9 +80,30 @@ class GetMembersOfDepartment(APIView):
 
     def get(self, request, id):
         department = self.get_department(id)
-        workers_department = WorkersDepartment.objects.filter(department=department).all()
-        workers = WorkersProfile.objects.filter(id__in=workers_department)
-        serializer = WorkerSerializer(workers, many=True)
+        departments = WorkersDepartment.objects.filter(department=department).all()
+        workers = [workers_department.worker for workers_department in list(departments)]
+        workers_profiles = WorkersProfile.objects.filter(id__in=[worker.id for worker in workers])
+        serializer = WorkerSerializer(workers_profiles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetUserDepartmentView(APIView):
+    permission_classes=[WorkersPermission, IsAuthenticated]
+    def get_worker_profile(self, id):
+        try:
+            return WorkersProfile.objects.get(user=id)
+        except WorkersProfile.DoesNotExist:
+            raise Http404
+    
+    def get(self, request):
+        worker = self.get_worker_profile(request.user)
+        workers_departments = WorkersDepartment.objects.filter(worker=worker).all()
+        departments = [worker_departments.department for worker_departments in workers_departments]
+        department_details = Department.objects.filter(id__in=[department.id for department in departments])
+        serializer = DepartmentSerializers(department_details, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+        
 
 

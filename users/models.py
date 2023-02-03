@@ -79,9 +79,7 @@ class WorkersProfile(models.Model):
 
 
 
-    def __repr__(self) :
-        return f'Workers({self.id}-{self.user}-{self.first_name})'
-
+    
 class HODProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=255)
