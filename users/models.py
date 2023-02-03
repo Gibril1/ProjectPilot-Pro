@@ -8,14 +8,12 @@ class UserManager(BaseUserManager):
             raise ValueError('User must have email')
         if not password:
             raise ValueError('User must have password')
-        # if not role:
-        #     raise ValueError('User must have role')
+        
         
         
         email = self.normalize_email(email)
         user = self.model(
             email=email,
-            # role=role,
             **other_fields
         )
         user.set_password(password)
@@ -81,8 +79,8 @@ class WorkersProfile(models.Model):
 
 
 
-    def __str__(self) -> str:
-        return self.first_name
+    def __repr__(self) :
+        return f'Workers({self.id}-{self.user}-{self.first_name})'
 
 class HODProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)

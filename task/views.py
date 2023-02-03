@@ -19,7 +19,7 @@ class TaskDetailsView(RetrieveUpdateDestroyAPIView, UserEditDeletePermission):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
-class AssignTask(APIView):
+class AssignTaskView(APIView):
     permission_classes = [HODsPermission]
     def get_task(self, id):
         try:
@@ -40,7 +40,7 @@ class AssignTask(APIView):
         if serializer.is_valid():
             serializer.save(task=task, createdBy = createdBy)
 
-class AssignTaskDetails(RetrieveUpdateDestroyAPIView, UserEditDeletePermission):
+class AssignTaskDetailsView(RetrieveUpdateDestroyAPIView, UserEditDeletePermission):
     permission_classes = [IsAuthenticated, UserEditDeletePermission]
     queryset = WorkerTask.objects.all()
     serializer_class = WorkerTaskSerializer

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department
+from .models import Department, WorkersDepartment
 
 
 # Register your models here.
@@ -9,3 +9,5 @@ class DepartmentAdmin(admin.ModelAdmin):
         'name'
     )
 admin.site.register(Department, DepartmentAdmin)
+
+admin.site.register(WorkersDepartment)

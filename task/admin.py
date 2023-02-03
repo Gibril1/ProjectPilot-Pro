@@ -1,13 +1,18 @@
 from django.contrib import admin
-from .models import  WorkersDepartment
-
-# Register your models here.
+from .models import  Task, WorkerTask
 
 
-class WorkersDeptAdmin(admin.ModelAdmin):
+
+
+class TaskAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'worker',
-        'department'
+        'description',
+        'progress',
+        'createdAt',
+        'due_date'
     )
-admin.site.register(WorkersDepartment, WorkersDeptAdmin)
+admin.site.register(Task, TaskAdmin)
+
+
+admin.site.register(WorkerTask)
