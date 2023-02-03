@@ -1,12 +1,9 @@
 from rest_framework import serializers
-from .models import WorkersDepartment, Task, WorkerTask
+from .models import Task, WorkerTask
 
 
 
-class WorkersDepartmentSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = WorkersDepartment
-        fields = '__all__'
+
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
