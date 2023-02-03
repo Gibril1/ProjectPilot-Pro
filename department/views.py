@@ -6,9 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework import status
 from users.models import HODProfile
-from ..serializers import DepartmentSerializers
-from ..permissions import HODsPermission, UserEditDeletePermission
-from ..models import Department
+from .serializers import DepartmentSerializers
+from app.permissions import HODsPermission, UserEditDeletePermission
+from .models import Department
 
 
 

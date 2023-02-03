@@ -2,7 +2,7 @@ from .serializers import RegistrationSerializer, HODSerializer, WorkerSerializer
 from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS
 from rest_framework.generics import RetrieveUpdateAPIView, CreateAPIView
 from .models import HODProfile, WorkersProfile, User
-from task.permissions import HODsPermission, WorkersPermission
+from app.permissions import HODsPermission, WorkersPermission
 
 
 class UserEditDeletePermission(BasePermission):

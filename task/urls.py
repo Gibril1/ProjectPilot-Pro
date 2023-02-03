@@ -10,7 +10,7 @@ from .views.workers import (
     JoinDepartmentView
 )
 
-from .views.task import (
+from .views.views import (
     TaskView,
     TaskDetailsView
 )

@@ -3,9 +3,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from users.models import HODProfile
-from ..models import Task, WorkerTask
-from ..serializers import TaskSerializer, WorkerTaskSerializer
-from ..permissions import HODsPermission, UserEditDeletePermission
+from .models import Task, WorkerTask
+from .serializers import TaskSerializer, WorkerTaskSerializer
+from app.permissions import HODsPermission, UserEditDeletePermission
 
 
 

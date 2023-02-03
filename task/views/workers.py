@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from users.models import WorkersProfile
-from ..permissions import WorkersPermission
+from ...app.permissions import WorkersPermission
 from ..models import Department, WorkersDepartment, WorkerTask, Task
 from ..serializers import WorkersDepartmentSerializers, TaskSerializer
 
