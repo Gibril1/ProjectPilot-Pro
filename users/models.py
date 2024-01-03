@@ -9,8 +9,8 @@ class UserManager(BaseUserManager):
         if not password:
             raise ValueError('User must have password')
         
-        
-        
+        print('Printing other fields')
+        print(other_fields)
         email = self.normalize_email(email)
         user = self.model(
             email=email,
@@ -57,39 +57,18 @@ class User(AbstractUser):
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=100, null=False)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, null=False)
-    createdAt = models.DateTimeField(auto_now=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    other_names = models.CharField(max_length=255, null=True)
+    dob = models.DateField(null=True)
+    
     object = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['password']
 
 
-class WorkersProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    other_names = models.CharField(max_length=255, null=True)
-    dob = models.DateField(null=True)
-    createdAt = models.DateTimeField(auto_now=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
-
-
-
-    
-class HODProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    other_names = models.CharField(max_length=255, null=True)
-    dob = models.DateField(null=True)
-    createdAt = models.DateTimeField(auto_now=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
-
-
-
-    def __str__(self) -> str:
-        return self.first_name
