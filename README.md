@@ -68,12 +68,12 @@ These are the list of tasks to be done for this project to be completed. They wi
 [x] Register a user and login (workers and team leads)
 
 * Team Lead Responsibilities
-- [x]Create Department
-- [x]CRUD Operations on Departments
-- [x]Project Creation
-- [x]Task Creation
-- [x]Task Assignment
-- [ ]Task Progress Tracking
+- [x] Create Department
+- [x] CRUD Operations on Departments
+- [x] Project Creation
+- [x] Task Creation
+- [x] Task Assignment
+- [ ] Task Progress Tracking
 
 * Workers Responsibilities
 - [x] Join a department and can only read it
