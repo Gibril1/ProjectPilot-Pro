@@ -65,18 +65,18 @@ Include details such as project name, description, start date, and end date.
 ## TODO CheckList
 These are the list of tasks to be done for this project to be completed. They will be checked as they are tackled
 
-[ x ] Register a user and login (workers and team leads)
+[x] Register a user and login (workers and team leads)
 
 * Team Lead Responsibilities
-- [ x ]Create Department
-- [ x ]CRUD Operations on Departments
-- [ x ]Project Creation
-- [ x ]Task Creation
-- [ x ]Task Assignment
+- [x]Create Department
+- [x]CRUD Operations on Departments
+- [x]Project Creation
+- [x]Task Creation
+- [x]Task Assignment
 - [ ]Task Progress Tracking
 
 * Workers Responsibilities
-- [ x ] Join a department and can only read it
+- [x] Join a department and can only read it
 - [ ] View tasks they have been assigned to
 
 * Additional Features
