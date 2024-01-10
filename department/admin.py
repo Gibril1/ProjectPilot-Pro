@@ -10,4 +10,10 @@ class DepartmentAdmin(admin.ModelAdmin):
     )
 admin.site.register(Department, DepartmentAdmin)
 
-admin.site.register(WorkersDepartment)
+class WorkersDepartmentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'worker',
+        'department'
+    )
+admin.site.register(WorkersDepartment, WorkersDepartmentAdmin)

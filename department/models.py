@@ -15,7 +15,7 @@ class WorkersDepartment(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
 
     def __repr__(self):
-        return self.worker
+        return f'{self.worker.first_name} --- {self.department.name}'
 
 
 

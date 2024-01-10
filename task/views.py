@@ -126,6 +126,7 @@ class AssignTaskDetailsView(RetrieveUpdateDestroyAPIView, UserEditDeletePermissi
     serializer_class = WorkerTaskSerializer
 
 
+# get all the tasks that have been assigned to users
 class GetUserTasksView(APIView):
     permission_classes = [IsAuthenticated, WorkersPermission]
 
